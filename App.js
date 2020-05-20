@@ -9,10 +9,11 @@
 import React from 'react';
 import CV from './src/CV';
 import ImageExample from './src/Image';
+import Instagram from './src/Instagram';
 
 const App: () => React$Node = () => {
   return (
-    <CV />
+    <Instagram />
   );
 };
 
