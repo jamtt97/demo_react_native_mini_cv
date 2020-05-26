@@ -10,10 +10,15 @@ import React from 'react';
 import CV from './src/CV';
 import ImageExample from './src/Image';
 import Instagram from './src/Instagram';
+import YouTube from './src/YT/YouTube';
+import { SafeAreaView } from 'react-native';
 
 const App: () => React$Node = () => {
   return (
-    <Instagram />
+    // <ImageExample/>
+    // <CV/>
+    <YouTube />
+    // <TextInputExample/>
   );
 };
 
