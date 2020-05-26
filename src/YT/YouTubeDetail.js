@@ -64,7 +64,7 @@ export default class YouTubeDetail extends Component {
                                 style = {styles.itemLogo}
                             />
                             <View style = {styles.itemDataBlock}>
-                                <Text style = {styles.itemTitle}>{formatTitle(item.title)}</Text>
+                                <Text style = {styles.itemTitle}>{formatTitle(item.title,60)}</Text>
                                 <View style = {{ flexDirection: 'row'}}>
                                     <Text style = {styles.itemData}>
                                         {item.channel.title}
