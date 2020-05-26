@@ -27,6 +27,8 @@ const features = [
     }
 ]
 
+const maxLength = 75
+
 export default class YouTubeDetail extends Component {
     constructor(props){
         super(props);
@@ -151,7 +153,7 @@ export default class YouTubeDetail extends Component {
 
     render(){
         const {data, fullTitle} = this.state
-        let title = fullTitle ? data.title : formatTitle(data.title,75)
+        let title = fullTitle ? data.title : formatTitle(data.title,maxLength)
         let icon = fullTitle ? require('../assets/up-arrow.png') : require('../assets/down-arrow.png')
         return (
             <View style = {styles.detailVideo}>
@@ -170,17 +172,19 @@ export default class YouTubeDetail extends Component {
                         <View style = {{width: '95%'}}>
                             <Text style = {styles.itemTitle}>{title}</Text>
                         </View>
-                        <TouchableWithoutFeedback
-                            onPress = {() => {
-                                this.setState({
-                                    fullTitle: !fullTitle
-                                })}}
-                        >
-                            <Image
-                                source = {icon}
-                                style = {{height: 17, width: 13}}
-                            />
-                        </TouchableWithoutFeedback>
+                        {data.title.length > maxLength &&
+                            <TouchableWithoutFeedback
+                                onPress = {() => {
+                                    this.setState({
+                                        fullTitle: !fullTitle
+                                    })}}
+                            >
+                                <Image
+                                    source = {icon}
+                                    style = {{height: 17, width: 13}}
+                                />
+                            </TouchableWithoutFeedback>
+                        }
                     </View>
                     <Text style = {{...styles.itemData, marginLeft: 10}}>{formatNumber(data.viewCount)} lượt xem</Text>
                     {this._renderFeatureBlock()}
