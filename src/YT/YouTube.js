@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {View, Text, Image, FlatList, TextInput, TouchableWithoutFeedback, Alert, Keyboard} from 'react-native';
-import videos from './YoutubeScreen';
+import videos from './data';
 import styles from './styles';
 import YouTubeDetail from './YouTubeDetail';
 import {formatNumber, formatTitle} from './utils'
@@ -35,11 +35,9 @@ export default class YouTube extends Component {
         this.state = {
             list: videos,
             tempList: videos,
-            changeScreen: false,
             textSearch: '',
             refreshing: false,
             onSearch: false,
-            selectedItem: null
         }
     }
 
@@ -132,7 +130,7 @@ export default class YouTube extends Component {
         return (
             <FlatList
                 data = {this.state.list}
-                renderItem = {({item}) => this._renderItem(item)}
+                renderItem = {({item,index}) => this._renderItem(item)}
                 keyExtractor = {item => item.id} 
                 onScroll = {() => Keyboard.dismiss()}
                 showsVerticalScrollIndicator = {false}
@@ -164,10 +162,7 @@ export default class YouTube extends Component {
 
     _onPressItem = (item) => {
         const {list} = this.state
-        this.setState({
-            changeScreen: true,
-            selectedItem: list[list.indexOf(item)]
-        })
+        this.props.navigation.navigate('VideoDetail', {data: item, id: list.indexOf(item), onDelete: this._refreshData})
     }
 
     _renderItem = (item) => {
@@ -237,19 +232,21 @@ export default class YouTube extends Component {
         });  
     }
 
-    render() {
-        const {changeScreen} = this.state
-        return (
-            changeScreen == false ?
-                <View style = {styles.container}>
-                    {this._renderHeader()}
-                    {this._renderContent()}
-                    <View style = {{height: 50, width: '100%'}}/>
-                    {this._renderBottom()}
-                </View>
-                :
-                <YouTubeDetail data = {this.state.selectedItem}/>
+    _refreshData = (id) => {
+        videos.splice(id,1)
+        this.setState({
+            list: videos
+        })
+    }
 
+    render() {
+        return (
+            <View style = {styles.container}>
+                {this._renderHeader()}
+                {this._renderContent()}
+                <View style = {{height: 50, width: '100%'}}/>
+                {this._renderBottom()}
+            </View> 
         )
     }
 }

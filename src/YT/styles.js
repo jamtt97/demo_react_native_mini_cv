@@ -122,7 +122,8 @@ export default {
 
     detailContainer: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        marginTop: 23
     },
 
     process: {
@@ -171,5 +172,13 @@ export default {
         width: '100%',
         justifyContent: 'space-between',
 
+    },
+    
+    detailHeader: {
+        height: 44, 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        paddingHorizontal: 8, 
+        alignItems: 'center'
     }
 }

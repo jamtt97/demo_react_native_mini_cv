@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, Image, FlatList, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import styles from './styles';
-import videos from './YoutubeScreen';
+import videos from './data';
 import {formatNumber, formatTitle} from './utils'
 
 const features = [
@@ -33,19 +33,31 @@ export default class YouTubeDetail extends Component {
     constructor(props){
         super(props);
         this.state = {
-            data: props.data,
-            fullTitle: false
+            data: null,
+            videoTitle: '',
+            fullTitle: false,
+            loading: true,
+            otherList: []
         }
+    }
+
+    componentDidMount(){
+        const {navigation, route} = this.props
+        const {data, id} = route.params
+        videos.splice(id,1)
+        this.setState({
+            data: data,
+            videoTitle: data.title,
+            loading:false,
+            otherList: videos
+        })
     }
 
     _renderVideoItem = (item) => {
         return (
             <TouchableWithoutFeedback
                 onPress = {()=>{
-                    this.setState({
-                        data: item
-                    })
-                    this.scrollview.scrollTo({x: 0, y: 0, animated: false})
+                    this.props.navigation.navigate('VideoDetail', {data: item, id: videos.indexOf(item)})
                 }}
             >
                     <View style = {styles.itemBlock}>
@@ -151,17 +163,55 @@ export default class YouTubeDetail extends Component {
         )
     }
 
+    _renderLoading = () => {
+        return (
+            <View style = {{ backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center'}}>
+                <Text>Loading ...</Text>
+            </View>
+        )
+    }
+
+    _onPressDelete = () => {
+        const {navigation, route} = this.props
+        route.params.onDelete()
+        navigation.goBack()
+    }
+
+    _renderHeader = () => {
+        const {navigation} = this.props
+        return(
+            <View style = {styles.detailHeader}>
+                <TouchableWithoutFeedback 
+                    onPress = {()=>navigation.goBack()}
+                >
+                    <View style = {{flexDirection: 'row', alignItems: 'center'}}>
+                        <Image source={require('../assets/back.png')}/>
+                        <Text style = {{color: '#438ff2', fontSize: 16, fontWeight: '600', marginLeft: 3}}>Back</Text>
+                    </View>
+                </TouchableWithoutFeedback>
+                
+                <TouchableWithoutFeedback
+                    onPress = {()=>this._onPressDelete()}
+                >
+                    <Image source = {require('../assets/bin.png')}/>
+                </TouchableWithoutFeedback>
+            </View>
+        )
+    }
+
     render(){
-        const {data, fullTitle} = this.state
-        let title = fullTitle ? data.title : formatTitle(data.title,maxLength)
+        const {data, fullTitle, videoTitle, loading, otherList} = this.state
+        let title = fullTitle ? videoTitle : formatTitle(videoTitle,maxLength)
         let icon = fullTitle ? require('../assets/up-arrow.png') : require('../assets/down-arrow.png')
         return (
-            <View style = {styles.detailVideo}>
+            loading ? this._renderLoading :
+            <View style = {styles.detailContainer}>
+                {this._renderHeader()}
                 <Image 
                     source = {{ 
                         uri: data.image
                     }}
-                    style = {{...styles.itemImage, marginTop: 23}}
+                    style = {{...styles.itemImage}}
                     resizeMode = {'cover'}
                 />
                 <View style = {styles.process}>
@@ -190,10 +240,9 @@ export default class YouTubeDetail extends Component {
                     {this._renderFeatureBlock()}
                     {this._renderRegisterBlock()}
                     {this._renderContinueBlock()}
-                    {videos.map(item => item != data ? this._renderVideoItem(item) : null)}
-                    <View style = {{height: 250}}/>
+                    {otherList.map((item) => item != data ? this._renderVideoItem(item) : null)}
                 </ScrollView>
             </View>
-        )
+         )
     }
 }
