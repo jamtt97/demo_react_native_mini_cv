@@ -162,7 +162,7 @@ export default class YouTube extends Component {
 
     _onPressItem = (item) => {
         const {list} = this.state
-        this.props.navigation.navigate('VideoDetail', {data: item, id: list.indexOf(item), onDelete: this._refreshData})
+        this.props.navigation.push('VideoDetail', {data: item, id: list.indexOf(item), onDelete: this._refreshData})
     }
 
     _renderItem = (item) => {

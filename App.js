@@ -11,8 +11,6 @@ import CV from './src/CV';
 import Instagram from './src/Instagram';
 import YouTube from './src/YT/YouTube';
 import YouTubeDetail  from './src/YT/YouTubeDetail';
-import Screen1 from './src/demo_navigation/Screen1';
-import Screen2 from './src/demo_navigation/Screen2';
 import { SafeAreaView, Image, Easing, Animated } from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
@@ -75,11 +73,12 @@ const App: () => React$Node = () => {
 
     <NavigationContainer>
         <Stack.Navigator
-            screenOptions={{
-              cardOverlayEnabled: true,
-              gestureEnabled: true,
-              ...MyTransition
-            }}
+            // screenOptions={{
+            //   cardOverlayEnabled: true,
+            //   gestureEnabled: true,
+            //   ...MyTransition
+            // }}
+            mode='modal'
         >
             <Stack.Screen
               name = "HomeScreen"
